@@ -17,36 +17,36 @@ typealias Set = (Int) -> Boolean
  * If  a set contains an element.
  * K
  */
-infix fun Set.contains(elem: Int): Boolean = TODO()
+infix fun Set.contains(elem: Int): Boolean = this.forAll { it == elem }
 
 /**
  * Singleton set from one element
  */
-fun singletonSet(elem: Int): Set = TODO()
+fun singletonSet(elem: Int): Set = {it == elem}
 
 /**
  * Union of the two sets
  */
-infix fun Set.union(set: Set): Set = TODO()
+infix fun Set.union(set: Set): Set = {contains(it) || set.contains(it)}
 
 /**
  * Intersection of the two sets
  */
-infix fun Set.intersect(set: Set): Set = TODO()
+infix fun Set.intersect(set: Set): Set = {contains(it) && set.contains(it)}
 
 /**
  * Difference of two given sets
  */
-infix fun Set.diff(set: Set): Set = TODO()
+infix fun Set.diff(set: Set): Set = {contains(it) && set.contains(it).not()}
 
 /**
  * Filter
  */
-fun Set.filter(predicate: (Int) -> Boolean): Set = TODO()
+fun Set.filter(predicate: (Int) -> Boolean): Set = {predicate(it)}
 
 /** =========== For brave enough =========== */
 
-const val BOUND = 1000
+const val BOUND = 6
 
 /**
  * if  all bounded integers within s satisfy p
@@ -73,6 +73,7 @@ class RTUSet {
     @Test
     fun `Set contains a given element`() {
         val set: Set = { it == 1 }
+        print(set.contains(1))
         assert(set contains 1)
     }
 
@@ -84,6 +85,23 @@ class RTUSet {
 
     @Test
     fun `Union set contains both elements`() {
+        val set = singletonSet(1) union singletonSet(2)
+        print(set.contains(1))
+        assert(set contains 1)
+        assert(set contains 2)
+    }
+
+    @Test
+    fun `Union set contains three elements`() {
+        val set1 = singletonSet(1)
+        val set2 = singletonSet(2)
+        val set3 = set1 union set2
+
+        assert(set1 contains 1)
+        assert(set2 contains 2)
+        assert(set3 contains 2)
+
+
         val set = singletonSet(1) union singletonSet(2)
         assert(set contains 1)
         assert(set contains 2)
